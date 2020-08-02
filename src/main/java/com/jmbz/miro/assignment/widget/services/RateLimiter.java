@@ -42,7 +42,6 @@ public class RateLimiter extends OncePerRequestFilter {
         if(endpointList==null || endpointList.isEmpty()){
             endpointList.add("default");
             rpmList.add(100);
-            rateLimitList.add(new RateLimit(rpmList.get(0),endpointList.get(0)));
         }
 
         create();
