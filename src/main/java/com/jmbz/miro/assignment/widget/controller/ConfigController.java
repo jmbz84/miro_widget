@@ -20,6 +20,9 @@ class ConfigController {
 
     @PatchMapping("/config")
     ResponseEntity updateConfig(@Valid @RequestBody WidgetConfig config) {
+        if(!rateLimiter.contains(Utils.getMethodEndpoint(config.getMethod(),config.getEndpoint()))){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("method and endpoint config not found");
+        }
         rateLimiter.setReqPerMin(Utils.getMethodEndpoint(config.getMethod(),config.getEndpoint()),config.getRpm());
         return ResponseEntity.status(HttpStatus.OK).body(config);
     }

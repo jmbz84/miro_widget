@@ -40,7 +40,7 @@ public class RateLimiter extends OncePerRequestFilter {
             throw new IllegalArgumentException("endpointList and rpmList must be the same size.");
         }
         if(endpointList==null || endpointList.isEmpty()){
-            endpointList.add("default");
+            endpointList.add("ALL:default");
             rpmList.add(100);
         }
 
@@ -87,6 +87,10 @@ public class RateLimiter extends OncePerRequestFilter {
         RateLimitInfo rateLimitInfo=new RateLimitInfo(rateLimit.getEndpoint(),rateLimit.getReqPerMin(),rateLimit.getAvailableTokens());
         httpResponse.setHeader("RATE_LIMIT",getJson(rateLimitInfo));
         filterChain.doFilter(httpRequest, httpResponse);
+    }
+
+    public boolean contains(String endpoint){
+        return endpointList.stream().filter(listItem-> listItem.equalsIgnoreCase(endpoint)).findFirst().isPresent();
     }
 
 
