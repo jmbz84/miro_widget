@@ -6,13 +6,13 @@
 	},
 	"item": [
 		{
-			"name": "post widget",
+			"name": "patch config",
 			"request": {
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"rpmDefault\":100,\r\n    \"rpmGetAllWidgets\":100\r\n    }",
+					"raw": "{\r\n    \"rpm\":10000,\r\n    \"endpoint\":\"/widgets\",\r\n    \"method\":\"get\"\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,14 +20,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/widget",
+					"raw": "http://localhost:8080/config",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"widget"
+						"config"
 					]
 				}
 			},
@@ -81,7 +81,7 @@
 			"response": []
 		},
 		{
-			"name": "patch widget",
+			"name": "put widget",
 			"request": {
 				"method": "PUT",
 				"header": [],
