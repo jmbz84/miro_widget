@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "b16e9826-08da-49b0-93fb-c1eff2d65d81",
+		"name": "widget",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post widget",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rpmDefault\":100,\r\n    \"rpmGetAllWidgets\":100\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/widget",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widget"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post widget Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n    \"height\":100,\r\n    \"width\":100,    \r\n    \"x\":100,\r\n    \"y\":100\r\n},\r\n{\r\n    \"height\":100,\r\n    \"width\":100,    \r\n    \"x\":0,\r\n    \"y\":50\r\n},{\r\n    \"height\":100,\r\n    \"width\":100,    \r\n    \"x\":100,\r\n    \"y\":50\r\n}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/widgets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widgets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Widget",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/widgets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widgets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch widget",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"height\":3300,\r\n    \"width\":3300,    \r\n    \"x\":12,\r\n    \"y\":51\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/widget/update/c6f32757-6251-44f7-a017-be8783fb969f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widget",
+						"update",
+						"c6f32757-6251-44f7-a017-be8783fb969f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get page widgets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/widgets/page/?page=0&size=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widgets",
+						"page",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get filter widgets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/widgets/filter/0/0/100/150",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widgets",
+						"filter",
+						"0",
+						"0",
+						"100",
+						"150"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post widget",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"height\":100,\r\n    \"width\":100,    \r\n    \"x\":100,\r\n    \"y\":100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/widget",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"widget"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
