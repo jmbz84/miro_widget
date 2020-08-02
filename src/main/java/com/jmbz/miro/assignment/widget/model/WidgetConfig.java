@@ -1,11 +1,17 @@
 package com.jmbz.miro.assignment.widget.model;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.NotNull;
 
 @Data
-@Component
 public class WidgetConfig {
-    Integer rpmDefault;
-    Integer rpmGetAllWidgets;
+    @NotNull
+    String endpoint;
+
+    @NotNull
+    String method;
+
+    @NotNull
+    Integer rpm;
 }

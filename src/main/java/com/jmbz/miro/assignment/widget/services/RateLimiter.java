@@ -1,11 +1,8 @@
 package com.jmbz.miro.assignment.widget.services;
 
+import com.jmbz.miro.assignment.widget.config.RateLimit;
 import com.jmbz.miro.assignment.widget.model.RateLimitInfo;
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.ConsumptionProbe;
-import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,9 +13,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.jmbz.miro.assignment.widget.utils.Utils.getJson;
+import static com.jmbz.miro.assignment.widget.utils.Utils.getMethodEndpoint;
 
 /**
  *  Rate Limiter Component
@@ -27,35 +26,55 @@ import static com.jmbz.miro.assignment.widget.utils.Utils.getJson;
 @Controller
 public class RateLimiter extends OncePerRequestFilter {
 
-    private Bucket bucket;
-    private Refill refill;
-    private Bandwidth limit;
+    @Value("#{'${rate.limit.endpoint.list}'.split(',')}")
+    private List<String> endpointList;
 
-    @Value("${ratelimit.rpm}")
-    private Integer reqPerMin;
+    @Value("#{'${rate.limit.value.list}'.split(',')}")
+    private List<Integer> rpmList;
 
-    @Value("${ratelimit.endpoint}")
-    private String endpoint;
-
+    private List<RateLimit> rateLimitList=new ArrayList<>();
 
     @PostConstruct
     private void init() {
+        if(rpmList.size()!=endpointList.size()){
+            throw new IllegalArgumentException("endpointList and rpmList must be the same size.");
+        }
+        if(endpointList==null || endpointList.isEmpty()){
+            endpointList.add("default");
+            rpmList.add(100);
+            rateLimitList.add(new RateLimit(rpmList.get(0),endpointList.get(0)));
+        }
+
+        create();
         build();
     }
 
-    public ConsumptionProbe tryConsumeAndReturnRemaining(long total){
-        return bucket.tryConsumeAndReturnRemaining(total);
+    private void create(){
+        for(int i=0;i<this.rpmList.size();i++){
+            rateLimitList.add(new RateLimit(rpmList.get(i),endpointList.get(i)));
+        }
     }
 
-    public void setReqPerMin(Integer reqPerMin){
-        this.reqPerMin=reqPerMin;
-        build();
+    private void build(){
+        rateLimitList.stream().forEach(rateLimit -> rateLimit.build());
     }
 
-    private void build() {
-        this.refill = Refill.intervally(reqPerMin, Duration.ofMinutes(1));
-        this.limit = Bandwidth.classic(reqPerMin, refill);
-        this.bucket = Bucket4j.builder().addLimit(limit).build();
+    private RateLimit getRateLimiter(String endpoint) {
+        int index=0;
+        for(int i=0;i<this.endpointList.size();i++){
+            if(endpointList.get(i).equalsIgnoreCase(endpoint)){
+                index=i;break;
+            }
+        }
+        return rateLimitList.get(index);
+    }
+
+    public ConsumptionProbe tryConsumeAndReturnRemaining(String endpoint,long total){
+        return getRateLimiter(endpoint).tryConsumeAndReturnRemaining(total);
+    }
+
+    public void setReqPerMin(String endpoint,Integer rpm){
+        this.getRateLimiter(endpoint).setReqPerMin(rpm).build();
     }
 
 
@@ -64,7 +83,9 @@ public class RateLimiter extends OncePerRequestFilter {
                                     HttpServletResponse httpResponse,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        RateLimitInfo rateLimitInfo=new RateLimitInfo(endpoint,reqPerMin,(int)bucket.getAvailableTokens());
+        RateLimit rateLimit=getRateLimiter(getMethodEndpoint(httpRequest.getMethod(),httpRequest.getRequestURI()));
+
+        RateLimitInfo rateLimitInfo=new RateLimitInfo(rateLimit.getEndpoint(),rateLimit.getReqPerMin(),rateLimit.getAvailableTokens());
         httpResponse.setHeader("RATE_LIMIT",getJson(rateLimitInfo));
         filterChain.doFilter(httpRequest, httpResponse);
     }

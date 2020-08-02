@@ -23,8 +23,12 @@ public class Utils {
         return "";
     }
 
-    public static  String getDate(){
+    public static String getDate(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern(RESPONSE_DATETIME_FORMAT));
+    }
+
+    public static String getMethodEndpoint(String method,String endpoint) {
+     return method.concat(":").concat(endpoint);
     }
 
 

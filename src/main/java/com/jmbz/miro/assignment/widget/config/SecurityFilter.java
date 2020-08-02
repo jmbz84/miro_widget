@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SecurityFilter extends OncePerRequestFilter {
+
     @Override
     protected void doFilterInternal(HttpServletRequest httpRequest,
                                     HttpServletResponse httpResponse,

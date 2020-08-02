@@ -1,6 +1,7 @@
 package com.jmbz.miro.assignment.widget.controller.interceptor;
 
 import com.jmbz.miro.assignment.widget.services.RateLimiter;
+import com.jmbz.miro.assignment.widget.utils.Utils;
 import io.github.bucket4j.ConsumptionProbe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class WidgetControllerInterceptor implements HandlerInterceptor {
     public boolean preHandle(
             HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        ConsumptionProbe probe=rateLimiter.tryConsumeAndReturnRemaining(1L);
+        ConsumptionProbe probe=rateLimiter.tryConsumeAndReturnRemaining(Utils.getMethodEndpoint(request.getMethod(),request.getRequestURI()),1L);
 
         if(!probe.isConsumed()){
             LocalDateTime date=LocalDateTime.now();
